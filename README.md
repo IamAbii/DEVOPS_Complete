@@ -1,6 +1,6 @@
 # Application
 
-This is a two-tier application.
+This is a two-tier application proprietary by Abhilash Hasankar.
 
 ## Getting Started
 
@@ -32,15 +32,19 @@ Update the backendUrl value to match the URL of your backend server.
 ## Running the Backend
 To run the backend server, follow these steps:
 
-pre-requisites: `python 3.11`
+pre-requisites: `python 3.11 + any version`
 
 1. Navigate to the backend directory.
 2. Install dependencies for the backend using `pip install requirements.txt`.
 3. Start the backend server on development using `python app.py`.
 
+## The above mentioned steps are for local run.
+
 
 ## Building and Serving the Static Content
 To build the static content for production and serve it using serve, follow these steps:
+
+At first pull this git repo then :
 
 1. Navigate to the frontend directory.
 2. Install dependencies for the front end using `npm install`.
@@ -56,5 +60,4 @@ This will start a server hosting the static content from the build directory.
 ### Contributing
 Feel free to contribute to this project by submitting pull requests.
 
-### License
-This project is licensed under the MIT License - see the LICENSE file for details.
+
