@@ -41,31 +41,7 @@ pipeline{
 				}
 			}
 		}
-	  stage('Trivy Scan') {
-		steps {
-			script {
-					// Define image names
-				def images = [
-				"abhilash2/frontend-app:1.0.0-7",
-				"abhilash2/backend-app:1.0.0-7"
-				]
 
-					// Create a local reports directory
-					sh 'mkdir -p reports'
-
-					// Loop through each image and scan
-					images.each { image ->
-					def safeName = image.replaceAll(/[:\/]/, "_")  // for filename safety
-					echo "🔍 Scanning Image: ${image}"
-					sh """
-						trivy image --format table \
-						--output reports/${safeName}_trivy_report.txt \
-						${image}
-               				 """
-            }
-        }
-    }
-}
 
 
 
