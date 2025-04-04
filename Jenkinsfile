@@ -41,6 +41,39 @@ pipeline{
 				}
 			}
 		}
+	  stage("Trivy Scan") {
+             steps {
+                 script {
+                     def images = ["${FRONTEND_IMAGE}:${IMAGE_TAG}", "${BACKEND_IMAGE}:${IMAGE_TAG}"]
+                     def trivyVersion = "aquasec/trivy:0.49.1"
+
+                     images.each { image ->
+                        def imageName = image.replaceAll("[/:]", "_")
+                        def reportFile = "${imageName}_trivy_report.txt"
+
+                        echo "🔍 Scanning Image: ${image}"
+                
+                        sh """
+                            docker run --rm \
+                            -v /var/run/docker.sock:/var/run/docker.sock \
+                            -v \$(pwd):/root/reports \
+                            ${trivyVersion} image ${image} \
+                            --no-progress \
+                            --scanners vuln \
+                            --exit-code 0 \
+                            -severity HIGH,CRITICAL \
+                            --format table > /root/reports/${reportFile}
+                        """
+
+                        echo "📄 Trivy report saved: ${reportFile}"
+                 }
+
+            // Archive all Trivy reports for Jenkins UI
+            archiveArtifacts artifacts: '*_trivy_report.txt', allowEmptyArchive: true
+            }   
+    }
+}
+
 
     
 }
