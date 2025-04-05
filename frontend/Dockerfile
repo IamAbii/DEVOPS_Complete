@@ -1,20 +1,22 @@
-# Use a builder stage to install dependencies
+# Stage 1: Build the React app
 FROM node:20-alpine as builder
 WORKDIR /app
 
-# Copy only package.json (ignore package-lock.json)
+# Copy package.json and install dependencies
 COPY package.json ./
-RUN npm install --only=production
+COPY package-lock.json ./
+RUN npm install
 
-# Copy the entire source code
+# Copy all files and build the app
 COPY . .
+RUN npm run build
 
-# Final production image
-FROM node:20-alpine
-WORKDIR /app
+# Stage 2: Serve with NGINX
+FROM nginx:stable-alpine
+COPY --from=builder /app/build /usr/share/nginx/html
 
-# Copy necessary files from the builder stage
-COPY --from=builder /app /app
+# Optional: Custom NGINX config (if needed for routing)
+# COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 3000
-CMD ["npm", "start"]
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
