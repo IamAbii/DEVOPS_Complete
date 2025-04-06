@@ -13,11 +13,14 @@
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <title>React App</title>
   </head>
+
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+
+    <!-- React will inject the app into this root div -->
     <div id="root"></div>
 
-    <!-- ✅ ADDED THIS LINE to load env.js at runtime -->
+    <!-- ✅ This line loads env.js at runtime -->
     <script src="%PUBLIC_URL%/env.js"></script>
 
   </body>
