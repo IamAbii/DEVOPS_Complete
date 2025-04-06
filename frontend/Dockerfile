@@ -1,24 +1,23 @@
-# Stage 1: Build React App
-FROM node:18 AS build
+# Stage 1 - React build
+FROM node:18-alpine as builder
 
 WORKDIR /app
-
 COPY package*.json ./
 RUN npm install
 
 COPY . .
 RUN npm run build
 
-# Stage 2: Serve with NGINX
+# Stage 2 - Serve with NGINX
 FROM nginx:alpine
 
-# Remove default NGINX config and copy our own
-COPY nginx.conf /etc/nginx/nginx.conf
+# Clean default nginx files
+RUN rm -rf /usr/share/nginx/html/*
 
-# ✅ Copy built files
-COPY --from=build /app/build /usr/share/nginx/html
+# Copy React build output
+COPY --from=builder /app/build /usr/share/nginx/html
 
-# ✅ Copy env.js (this must be in public/ before build, or copied after)
+# ✅ Inject runtime config without editing code
 COPY public/env.js /usr/share/nginx/html/env.js
 
 EXPOSE 80
