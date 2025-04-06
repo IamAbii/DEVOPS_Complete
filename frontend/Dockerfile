@@ -1,15 +1,15 @@
-# ===== Stage 1: Build React App =====
-FROM node:20-alpine as builder
+# Build stage
+FROM node:18 AS build
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
 RUN npm run build
 
-# ===== Stage 2: Serve App with NGINX =====
-FROM nginx:stable-alpine
-WORKDIR /usr/share/nginx/html
-RUN rm -rf ./*
-COPY --from=builder /app/build .
+# Production stage
+FROM nginx:alpine
+COPY --from=build /app/build /usr/share/nginx/html
+COPY ./public/env.js /usr/share/nginx/html/env.js
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
