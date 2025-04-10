@@ -2,10 +2,12 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 import requests
 import socket
+import os
 
+# Initialize Flask app
 app = Flask(__name__)
 
-# Configure CORS to allow requests from anywhere
+# IMPORTANT: Configure CORS to allow requests from anywhere
 # This is critical for option 1 where frontend and backend are on different domains
 CORS(app, resources={r"/*": {"origins": "*"}})
 
@@ -16,7 +18,7 @@ def index():
 @app.route('/api/getJoke', methods=['GET'])
 def send_request():
     joke = get_joke()
-    # Return as JSON so frontend can parse it easily
+    # UPDATED: Return as JSON so frontend can parse it easily
     return jsonify({"joke": joke})
 
 def get_joke():
@@ -34,6 +36,15 @@ def get_joke():
         app.logger.error(f"Error fetching joke: {str(e)}")
         return "Sorry, an error occurred while fetching your joke. Please try again later!"
 
+# ADDED: Test endpoint for debugging connectivity
+@app.route('/api/test', methods=['GET'])
+def test():
+    return jsonify({
+        "status": "success",
+        "message": "Backend is accessible!",
+        "cors": "enabled"
+    })
+
 if __name__ == '__main__':
     # Get the server's IP address
     hostname = socket.gethostname()
@@ -43,4 +54,4 @@ if __name__ == '__main__':
     
     # Run the app on the server's IP address and port 5000
     # Note: In production, this will be replaced by gunicorn command
-    app.run(host='0.0.0.0', port=5000, debug=False)	
+    app.run(host='0.0.0.0', port=5000, debug=False)
