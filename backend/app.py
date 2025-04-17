@@ -2,13 +2,9 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 import requests
 import socket
-import os
 
-# Initialize Flask app
 app = Flask(__name__)
-
-# IMPORTANT: Configure CORS to allow requests from anywhere
-# This is critical for option 1 where frontend and backend are on different domains
+# Configure CORS to allow requests from anywhere
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 @app.route('/')
@@ -18,7 +14,7 @@ def index():
 @app.route('/api/getJoke', methods=['GET'])
 def send_request():
     joke = get_joke()
-    # UPDATED: Return as JSON so frontend can parse it easily
+    # Return as JSON so frontend can parse it easily
     return jsonify({"joke": joke})
 
 def get_joke():
@@ -33,10 +29,10 @@ def get_joke():
         # Ensure the joke is properly formatted with a newline before the custom message
         return f"{joke_data['joke']} \n \n --->> **** Did I bring a smile on your face, Abhilash? If not, refresh for a new one by clicking on CLICK tab above. Go on, it's for free—don't be STINGY. LOL !!!! 😄 A smile is for free ****"
     except Exception as e:
-        app.logger.error(f"Error fetching joke: {str(e)}")
+        print(f"Error fetching joke: {str(e)}")
         return "Sorry, an error occurred while fetching your joke. Please try again later!"
 
-# ADDED: Test endpoint for debugging connectivity
+# Test endpoint for debugging connectivity
 @app.route('/api/test', methods=['GET'])
 def test():
     return jsonify({
@@ -52,6 +48,5 @@ if __name__ == '__main__':
     
     print(f"Starting server on {ip_address}:5000")
     
-    # Run the app on the server's IP address and port 5000
-    # Note: In production, this will be replaced by gunicorn command
+    # Run the app on all interfaces
     app.run(host='0.0.0.0', port=5000, debug=False)
