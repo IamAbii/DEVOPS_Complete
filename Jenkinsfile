@@ -40,22 +40,5 @@ pipeline {
             }
         }
 
-        stage("Trigger CD Pipeline") {
-            steps {
-                script {
-                    withCredentials([string(credentialsId: 'JENKINS_API_TOKEN', variable: 'API_TOKEN')]) {
-                        sh """
-                            CRUMB_JSON=\$(curl -s -u abhilash2:\$API_TOKEN http://ec2-3-110-46-176.ap-south-1.compute.amazonaws.com:8080/crumbIssuer/api/json)
-                            CRUMB=\$(echo \$CRUMB_JSON | jq -r '.crumb')
-                            CRUMB_FIELD=\$(echo \$CRUMB_JSON | jq -r '.crumbRequestField')
-
-                            curl -v -X POST -u abhilash2:\$API_TOKEN \\
-                                -H "\$CRUMB_FIELD: \$CRUMB" \\
-                                "http://ec2-3-110-46-176.ap-south-1.compute.amazonaws.com:8080/job/gitops-CD/buildWithParameters?token=gitops-token&IMAGE_TAG=${IMAGE_TAG}"
-                        """
-                    }
-                }
-            }
-        }
     }
 }
