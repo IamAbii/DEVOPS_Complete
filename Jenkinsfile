@@ -44,17 +44,7 @@ pipeline{
 		}
 
 
-	    stage("Trigger CD Pipeline") {
-    		steps {
-        		script {
-           			 sh """
-               			    curl -v -X POST \
-    					 "http://ec2-3-110-46-176.ap-south-1.compute.amazonaws.com:8080/job/gitops-CD/buildWithParameters?token=gitops-token&IMAGE_TAG=${IMAGE_TAG}&api_token=${JENKINS_API_TOKEN}"
-           			"""
-        			}
-   		       }
-		}
-
+	   
 
 
 
