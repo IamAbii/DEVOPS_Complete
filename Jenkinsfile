@@ -9,7 +9,7 @@ pipeline {
         DOCKER_PASS = "dockerhub"
         FRONTEND_IMAGE = "${DOCKER_USER}/frontend-app"
         BACKEND_IMAGE = "${DOCKER_USER}/backend-app"
-       // JENKINS_API_TOKEN = credentials("JENKINS_API_TOKEN")
+    
     }
     stages {
         stage("Clean Workspace") {
