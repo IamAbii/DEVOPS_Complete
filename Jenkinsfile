@@ -9,6 +9,7 @@ pipeline{
         DOCKER_PASS = "dockerhub"
         FRONTEND_IMAGE = "${DOCKER_USER}" + "/" + "frontend-app"
         BACKEND_IMAGE = "${DOCKER_USER}" + "/" + "backend-app"
+	JENKINS_API_TOKEN = credentials("JENKINS_API_TOKEN")
     }
 
     
@@ -41,6 +42,23 @@ pipeline{
 				}
 			}
 		}
+
+
+	    stage("Trigger CD Pipeline") {
+    		steps {
+        		script {
+           			 sh """
+               			    curl -v --user Abhilash:${JENKINS_API_TOKEN} \\
+                    			 -X POST \\
+                                         -H 'cache-control: no-cache' \\
+                                         -H 'Content-Type: application/x-www-form-urlencoded' \\
+                                         --data-urlencode IMAGE_TAG=${IMAGE_TAG} \\
+                                         "http://ec2-3-110-46-176.ap-south-1.compute.amazonaws.com:8080/job/gitops-CD/buildWithParameters?token=gitops-token"
+           			    """
+        			}
+   		       }
+		}
+
 
 
 
