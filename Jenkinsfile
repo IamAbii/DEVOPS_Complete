@@ -11,34 +11,35 @@ pipeline {
         BACKEND_IMAGE = "${DOCKER_USER}/backend-app"
         JENKINS_API_TOKEN = credentials("JENKINS_API_TOKEN")
     }
-
     stages {
-
         stage("Clean Workspace") {
             steps {
                 cleanWs()
             }
         }
-
         stage("Checkout Code") {
             steps {
                 git branch: 'main', credentialsId: 'github', url: 'https://github.com/IamAbii/DEVOPS_Complete.git'
             }
         }
-
         stage('Build & Push Docker Images') {
             steps {
                 script {
                     docker.withRegistry('', DOCKER_PASS) {
                         def frontend_image = docker.build("${FRONTEND_IMAGE}:${IMAGE_TAG}", "frontend")
                         def backend_image = docker.build("${BACKEND_IMAGE}:${IMAGE_TAG}", "backend")
-
                         frontend_image.push("${IMAGE_TAG}")
                         backend_image.push("${IMAGE_TAG}")
                     }
                 }
             }
         }
-
+    }
+    post {
+        success {
+            build job: 'gitops-CD', parameters: [
+                string(name: 'IMAGE_TAG', value: env.IMAGE_TAG)
+            ]
+        }
     }
 }
