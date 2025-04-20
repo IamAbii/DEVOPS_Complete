@@ -35,11 +35,11 @@ pipeline {
             }
         }
     }
-   // post {
-     //   success {
-       //     build job: 'gitops-CD', parameters: [
-         //       string(name: 'IMAGE_TAG', value: env.IMAGE_TAG)
-           // ]
-      //  }
-  //  }
+    post {
+        success {
+            build job: 'gitops-CD', parameters: [
+                string(name: 'IMAGE_TAG', value: env.IMAGE_TAG)
+            ]
+        }
+    }
 }
