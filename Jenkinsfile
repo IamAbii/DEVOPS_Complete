@@ -41,5 +41,5 @@ pipeline {
          //       string(name: 'IMAGE_TAG', value: env.IMAGE_TAG)
            // ]
       //  }
-    }
+  //  }
 }
