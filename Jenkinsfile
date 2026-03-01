@@ -1,7 +1,6 @@
 pipeline {
-    agent {
-        label "Jenkins-Agent"
-    }
+    agent any 
+    
     environment {
         RELEASE = "1.0.0"
         IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
@@ -33,13 +32,6 @@ pipeline {
                     }
                 }
             }
-        }
-    }
-    post {
-        success {
-            build job: 'gitops-CD', parameters: [
-                string(name: 'IMAGE_TAG', value: env.IMAGE_TAG)
-            ]
         }
     }
 }
