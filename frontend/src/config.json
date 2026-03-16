@@ -1,3 +1,3 @@
 {
-    "backendUrl": "http://acedd10146ca74a38bc21278f670ba3b-512260085.ap-south-1.elb.amazonaws.com"
+    "backendUrl": "backendUrl": "http://backend-service:5000"
 }
