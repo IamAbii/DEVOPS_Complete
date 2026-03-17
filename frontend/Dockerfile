@@ -1,15 +1,19 @@
-# Stage 1: Build React App
-FROM node:18-alpine as builder
+# Simple Dockerfile for React Frontend
+FROM node:18-alpine
+
 WORKDIR /app
+
+# Copy package files and install dependencies
 COPY package*.json ./
 RUN npm install
-COPY . .
-RUN rm -f public/env.js
+
+# Copy all frontend source files
+COPY public/ ./public/
+COPY src/ ./src/
+
+# Build the React app
 RUN npm run build
 
-# Stage 2: Serve with Nginx
-FROM nginx:alpine
-COPY --from=builder /app/build /usr/share/nginx/html
-COPY --from=builder /app/src/config.json /usr/share/nginx/html/config.json
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+EXPOSE 3000
+
+CMD ["npm", "start"]
