@@ -1,19 +1,30 @@
-# Simple Dockerfile for React Frontend
-FROM node:18-alpine
+FROM node:18-alpine AS build
 
 WORKDIR /app
 
-# Copy package files and install dependencies
 COPY package*.json ./
 RUN npm install
 
-# Copy all frontend source files
 COPY public/ ./public/
 COPY src/ ./src/
 
-# Build the React app
 RUN npm run build
+
+# Production stage - use nginx
+FROM nginx:alpine
+
+# Copy built React app
+COPY --from=build /app/build /usr/share/nginx/html
+
+# Configure nginx to serve on port 3000 and handle SPA routing
+RUN echo 'server { \
+    listen 3000; \
+    root /usr/share/nginx/html; \
+    location / { \
+        try_files $uri /index.html; \
+    } \
+}' > /etc/nginx/conf.d/default.conf
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["nginx", "-g", "daemon off;"]
