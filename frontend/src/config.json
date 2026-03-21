@@ -1,3 +1,3 @@
 {
-    "backendUrl": "http://backend-service:5000"
+    "backendUrl": "http://backend-service.devops-app.svc.cluster.local:5000"
 }
