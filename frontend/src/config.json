@@ -1,3 +1,3 @@
 {
-    "backendUrl": "http://backend-service.devops-app.svc.cluster.local:5000"
+    "backendUrl": "http://a9a7666b550c040b6aba4d8e35ef217f-1031147924.ap-south-1.elb.amazonaws.com:5000"
 }
