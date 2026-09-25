@@ -32,25 +32,6 @@ pipeline {
             }
         }
 
-        stage('Build Frontend') {
-            steps {
-                sh '''
-                    cd frontend
-                    npm install
-                    npm run build
-                '''
-            }
-        }
-
-        stage('Build Backend') {
-            steps {
-                sh '''
-                    cd backend
-                    pip install -r requirements.txt
-                '''
-            }
-        }
-
         stage('Build & Push Docker Images') {
             steps {
                 script {
@@ -84,6 +65,8 @@ pipeline {
             echo "Build succeeded!"
             echo "Build Number: ${BUILD_NUMBER}"
             echo "Image Tag: ${IMAGE_TAG}"
+            echo "Frontend Image: ${FRONTEND_IMAGE}:${IMAGE_TAG}"
+            echo "Backend Image: ${BACKEND_IMAGE}:${IMAGE_TAG}"
             echo "Build URL: ${BUILD_URL}"
         }
 
