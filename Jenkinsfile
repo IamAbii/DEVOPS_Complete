@@ -67,7 +67,6 @@ pipeline {
             echo "Image Tag: ${IMAGE_TAG}"
             echo "Frontend Image: ${FRONTEND_IMAGE}:${IMAGE_TAG}"
             echo "Backend Image: ${BACKEND_IMAGE}:${IMAGE_TAG}"
-            echo "Build URL: ${BUILD_URL}"
         }
 
         failure {
