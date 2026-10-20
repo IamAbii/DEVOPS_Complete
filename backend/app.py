@@ -1,11 +1,13 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 import requests
+import os
 import socket
 
 app = Flask(__name__)
 # Configure CORS to allow requests from anywhere
-CORS(app, resources={r"/*": {"origins": "*"}})
+allowed_origin = os.environ.get("ALLOWED_ORIGIN", "*")
+CORS(app, resources={r"/*": {"origins": allowed_origin}})
 
 @app.route('/')
 def index():

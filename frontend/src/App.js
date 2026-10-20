@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './App.css';
-import config from './config.json'; // Import configuration
+
+
 
 function App() {
   const [response, setResponse] = useState('');
   const [loading, setLoading] = useState(false);
-  
-  // Use backend URL from configuration
-  const { backendUrl } = config;
+  const backendUrl = window.APP_CONFIG?.backendUrl ?? ''; 
+	// Use backend URL from configuration
   
   // UPDATED: Improved error handling and response processing
   const handleClick = async () => {
